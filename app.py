@@ -13,6 +13,11 @@ st.set_page_config(
 st.title("🤗 Friendly")
 st.subheader("The AI coach for middle-schoolers")
 
+st.info("""
+**Responsible Use Notice**  
+Kindly is designed to support kind communication. It does not replace teachers, parents, counselors, or real friendships. If a situation feels unsafe or serious, users should talk to a trusted adult.
+""")
+
 # --- API Key Setup ---
 # Try to get the key from Streamlit secrets, then environment variables
 api_key = None
