@@ -5,32 +5,37 @@ from google.genai import types
 
 # --- Page Configuration ---
 st.set_page_config(
-    page_title="Kindly - AI Coach",
+    page_title="Friendly - AI Coach",
     page_icon="🤗",
     layout="centered"
 )
 
-st.title("🤗 Kindly")
-st.subheader("The rapid-response friendship coach")
+st.title("🤗 Friendly")
+st.subheader("The AI coach for middle-schoolers")
 
 st.info("""
-**Responsible Use Notice** Kindly is designed to support kind communication. It does not replace teachers, parents, counselors, or real friendships. If a situation feels unsafe or serious, users should talk to a trusted adult.
+**Responsible Use Notice**  
+Kindly is designed to support kind communication. It does not replace teachers, parents, counselors, or real friendships. If a situation feels unsafe or serious, users should talk to a trusted adult.
 """)
 
 # --- API Key Setup ---
+# Try to get the key from Streamlit secrets, then environment variables
 api_key = None
 
 try:
     if "GOOGLE_API_KEY" in st.secrets:
         api_key = st.secrets["GOOGLE_API_KEY"]
 except:
+    # Secrets file might not exist locally, which is fine
     pass
 
 if not api_key and "GOOGLE_API_KEY" in os.environ:
     api_key = os.environ["GOOGLE_API_KEY"]
 
 if not api_key:
-    # Fallback for local testing
+    # Fallback for local testing if not set in env (Not recommended for production)
+    # You can replace this string with your actual key for local testing, 
+    # but don't commit it to GitHub!
     api_key = "AIzaSyD5D5_phGNIDa0tq7ISS8WFFUEz8SrpZzI" 
 
 if not api_key:
@@ -44,7 +49,7 @@ def get_client():
 
 client = get_client()
 
-# --- NEW: Short "Rapid Response" System Instructions ---
+# --- System Instructions ---
 SYSTEM_INSTRUCTION = """Role: You are "Kindly," a rapid-response friendship coach for middle school students.
 Goal: Help students handle conflict in the moment.
 Constraint: You must keep responses SHORT (under 50 words).
@@ -93,7 +98,7 @@ Want to try writing that out here first?
 # --- Chat History ---
 if "messages" not in st.session_state:
     st.session_state.messages = [
-        {"role": "assistant", "content": "Hi! I'm Kindly. I'm here to help. What's happening?"}
+        {"role": "assistant", "content": "Hi! I'm Friendly. I'm here to help you navigate tricky situations with friends or school. What's on your mind?"}
     ]
 
 # Display chat messages
@@ -114,9 +119,11 @@ if prompt := st.chat_input("Type here..."):
         full_response = ""
         
         try:
-            # UPDATED: Config for Speed and Focus
+            # Configuration for the model
             generate_content_config = types.GenerateContentConfig(
-                temperature=0.5, # Lower temperature for focused, less rambley answers
+                thinking_config=types.ThinkingConfig(
+                    thinking_level="HIGH",
+                ),
                 safety_settings=[
                     types.SafetySetting(
                         category="HARM_CATEGORY_HARASSMENT",
@@ -138,6 +145,10 @@ if prompt := st.chat_input("Type here..."):
                 system_instruction=[types.Part.from_text(text=SYSTEM_INSTRUCTION)],
             )
 
+            # Create the chat history for the API
+            # Note: We only send the last few messages to keep context but avoid token limits if needed
+            # For now, we'll just send the current prompt with the system instruction handling the persona
+            
             contents = [
                 types.Content(
                     role="user",
@@ -147,9 +158,9 @@ if prompt := st.chat_input("Type here..."):
                 ),
             ]
 
-            # UPDATED: Using 'gemini-1.5-flash' for speed ("Seconds, not paragraphs")
+            # Stream the response
             response_stream = client.models.generate_content_stream(
-                model="gemini-1.5-flash",
+                model="gemini-3-pro-preview",
                 contents=contents,
                 config=generate_content_config,
             )
