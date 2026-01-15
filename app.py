@@ -118,28 +118,16 @@ if prompt := st.chat_input("Type here..."):
         
         try:
             # Configuration for the model
+            # SAFE MODE CONFIGURATION
+            # We use simple strings here to avoid import errors
             generate_content_config = types.GenerateContentConfig(
-                max_output_tokens=150,
-                thinking_config=types.ThinkingConfig(
-                    thinking_level="HIGH",
-                ),
+                temperature=0.5,
+                max_output_tokens=200, 
                 safety_settings=[
-                    types.SafetySetting(
-                        category="HARM_CATEGORY_HARASSMENT",
-                        threshold="BLOCK_ONLY_HIGH",
-                    ),
-                    types.SafetySetting(
-                        category="HARM_CATEGORY_HATE_SPEECH",
-                        threshold="BLOCK_ONLY_HIGH",
-                    ),
-                    types.SafetySetting(
-                        category="HARM_CATEGORY_SEXUALLY_EXPLICIT",
-                        threshold="BLOCK_LOW_AND_ABOVE",
-                    ),
-                    types.SafetySetting(
-                        category="HARM_CATEGORY_DANGEROUS_CONTENT",
-                        threshold="BLOCK_LOW_AND_ABOVE",
-                    ),
+                    {"category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_ONLY_HIGH"},
+                    {"category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_ONLY_HIGH"},
+                    {"category": "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
+                    {"category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
                 ],
                 system_instruction=[types.Part.from_text(text=SYSTEM_INSTRUCTION)],
             )
