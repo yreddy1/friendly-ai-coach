@@ -119,17 +119,18 @@ if prompt := st.chat_input("Type here..."):
         try:
             # Configuration for the model
             generate_content_config = types.GenerateContentConfig(
+                max_output_tokens=150,
                 thinking_config=types.ThinkingConfig(
                     thinking_level="HIGH",
                 ),
                 safety_settings=[
                     types.SafetySetting(
                         category="HARM_CATEGORY_HARASSMENT",
-                        threshold="BLOCK_LOW_AND_ABOVE",
+                        threshold="BLOCK_ONLY_HIGH",
                     ),
                     types.SafetySetting(
                         category="HARM_CATEGORY_HATE_SPEECH",
-                        threshold="BLOCK_LOW_AND_ABOVE",
+                        threshold="BLOCK_ONLY_HIGH",
                     ),
                     types.SafetySetting(
                         category="HARM_CATEGORY_SEXUALLY_EXPLICIT",
