@@ -116,7 +116,7 @@ if prompt := st.chat_input("Type here..."):
         try:
             # Stream the response
             response_stream = client.responses.create(
-                model="gpt-5.1-mini",
+                model="gpt-4.1-mini",
                 input=[
                     {"role": "system", "content": SYSTEM_INSTRUCTION},
                     {"role": "user", "content": prompt},
