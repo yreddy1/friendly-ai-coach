@@ -4,12 +4,130 @@ from openai import OpenAI
 
 # --- Page Configuration ---
 st.set_page_config(
-    page_title="Friendly - AI Coach",
+    page_title="Kindly - AI Coach",
     page_icon="🤗",
     layout="centered"
 )
 
-st.title("🤗 Friendly")
+st.markdown(
+    """
+    <style>
+    /* ===== FORCE REMOVE GREY FROM USER CHAT MESSAGES ===== */
+
+    /* Target user chat message container */
+    div[data-testid="stChatMessage"][data-role="user"] {
+        background: transparent !important;
+        box-shadow: none !important;
+    }
+
+    /* Target inner bubble */
+    div[data-testid="stChatMessage"][data-role="user"] > div {
+        background-color: #fdebe0 !important;  /* same cream background */
+        border: 1px solid rgba(0, 0, 0, 0.08) !important;
+        border-radius: 16px !important;
+        box-shadow: none !important;
+    }
+
+    /* Ensure text is readable */
+    div[data-testid="stChatMessage"][data-role="user"] p {
+        color: #2f2f2f !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+st.markdown(
+    """
+    <style>
+    :root {
+        --friendly-cream: #fff6ec;
+        --friendly-peach: #ffd8c9;
+        --friendly-blue: #d9ecff;
+        --friendly-text: #3a3a3a;
+        --friendly-user-bubble: #fff6ec;
+        --friendly-assistant-bubble: #e8f3ff;
+    }
+    .stApp {
+        background: linear-gradient(160deg, var(--friendly-cream) 0%, var(--friendly-peach) 45%, var(--friendly-blue) 100%);
+        color: var(--friendly-text);
+    }
+    .stApp, .stApp p, .stApp li, .stApp label, .stApp span, .stApp div {
+        color: var(--friendly-text);
+    }
+    .stImage {
+        position: fixed;
+        left: 24px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 320px;
+        z-index: 10;
+        display: flex;
+        justify-content: center;
+    }
+    .stImage img {
+        width: 100%;
+        border-radius: 16px;
+        display: block;
+    }
+    .stAlert {
+        background-color: #e7f2ff;
+        border: 1px solid #cfe3ff;
+        color: #2f4a6d;
+        border-radius: 12px;
+    }
+    .stAlert p {
+        color: #2f4a6d;
+    }
+    div[data-testid="stChatMessage"][data-chat-message="user"] div[data-testid="stChatMessageContent"] {
+        background-color: var(--friendly-user-bubble) !important;
+        border-radius: 16px;
+        padding: 0.75rem 1rem;
+        border: 1px solid #f1e2d3 !important;
+        box-shadow: none !important;
+    }
+    div[data-testid="stChatMessage"][data-chat-message="user"] > div,
+    div[data-testid="stChatMessage"][data-role="user"] > div,
+    div[data-testid="stChatMessage"][data-role="user"] div[data-testid="stChatMessageContent"] {
+        background-color: var(--friendly-user-bubble) !important;
+        border-radius: 16px !important;
+        border: 1px solid #f1e2d3 !important;
+        box-shadow: none !important;
+    }
+    div[data-testid="stChatMessage"][data-chat-message="assistant"] div[data-testid="stChatMessageContent"] {
+        background-color: var(--friendly-assistant-bubble);
+        border-radius: 16px;
+        padding: 0.75rem 1rem;
+        border: none;
+    }
+    div[data-testid="stChatMessageContent"] p {
+        margin-bottom: 0;
+        color: var(--friendly-text);
+    }
+    .block-container {
+        max-width: none;
+        padding-left: 360px;
+        padding-right: 2rem;
+    }
+    @media (max-width: 900px) {
+        .stImage {
+            position: static;
+            transform: none;
+            width: 260px;
+            margin: 0 auto 1rem auto;
+        }
+        .block-container {
+            padding-left: 1.5rem;
+        }
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+st.image("kindly.png")
+
+st.title("🤗 Kindly")
 st.subheader("The AI coach for middle-schoolers")
 
 st.info("""
@@ -93,7 +211,7 @@ Model Response: "I’m really concerned about what you shared. You’re not alon
 # --- Chat History ---
 if "messages" not in st.session_state:
     st.session_state.messages = [
-        {"role": "assistant", "content": "Hi! I'm Friendly. I'm here to help you navigate tricky situations with friends or school. What's on your mind?"}
+        {"role": "assistant", "content": "Hi! I’m Kindly 😊 I’m here to help you think through tricky moments with friends or school. What’s on your mind?"}
     ]
 
 # Display chat messages
